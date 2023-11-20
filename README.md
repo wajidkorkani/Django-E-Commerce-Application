@@ -1,1 +1,0 @@
-# Django-E-Commerce-Application
