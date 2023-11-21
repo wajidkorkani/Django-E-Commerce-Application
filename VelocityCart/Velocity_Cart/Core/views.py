@@ -17,3 +17,14 @@ def Product_About_Page(request, product_id):
         'product' : product,
     }
     return render(request, template, context)
+
+def Searchbar(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        products = Product.objects.filter(title__contains=search)
+        product_categoery = Product.objects.filter(categorey__name__icontains=search)
+        template = 'Core/Searchbar.html'
+        context = {
+            'products' : products,
+        }
+        return render(request, template, context)

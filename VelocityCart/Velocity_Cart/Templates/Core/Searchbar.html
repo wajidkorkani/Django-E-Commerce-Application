@@ -1,16 +1,35 @@
 {% extends 'base.html' %}
 {% block head %}
-<title>Home | Velocity Cart</title>
+<title>Velocity Cart</title>
 {% endblock %}
 {% block body %}
-<form method="GET" action="{% url 'searchbar' %}">
-  {% csrf_token %}
-  <input type="text" name="search">
-  <button type="submit">Submit</button>
-</form>
-
 {% if products %}
 {% for product in products %}
+<a href="{% url 'Product_About_Page' product.id %}">
+{% if product.image1 %}
+<img src="{{ product.image1.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image2.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image3.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image4.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image5.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image6.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image7.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image8.url }}">
+{% endif %}
+</a>
+<h1>{{ product.title }}</h1>
+<strong>$ {{ product.price }}</strong>
+<br><br>
+{% endfor %}
+{% elif product_categoery %}
+{% for product in product_categoery %}
 <a href="{% url 'Product_About_Page' product.id %}">
 {% if product.image1 %}
 <img src="{{ product.image1.url }}">
