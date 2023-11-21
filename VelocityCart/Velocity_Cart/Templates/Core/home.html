@@ -1,1 +1,32 @@
-<h1>{{ text }}</h1>
+{% extends 'base.html' %}
+{% block head %}
+<title>Home | Velocity Cart</title>
+{% endblock %}
+{% block body %}
+{% if products %}
+{% for product in products %}
+{% if product.image1 %}
+<img src="{{ product.image1.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image2.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image3.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image4.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image5.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image6.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image7.url }}">
+{% elif product.image2 %}
+<img src="{{ product.image8.url }}">
+{% endif %}
+<h1>{{ product.title }}</h1>
+<strong>$ {{ product.price }}</strong>
+<br><br>
+{% endfor %}
+{% else %}
+<h2>Sorry products are not added yet!</h2>
+{% endif %}
+{% endblock %}
