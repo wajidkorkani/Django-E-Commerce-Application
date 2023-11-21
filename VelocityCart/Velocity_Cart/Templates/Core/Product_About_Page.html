@@ -3,37 +3,37 @@
 <title>Home | Velocity Cart</title>
 {% endblock %}
 {% block body %}
-<form method="GET" action="{% url 'searchbar' %}">
-  {% csrf_token %}
-  <input type="text" name="search">
-  <button type="submit">Submit</button>
-</form>
-
-{% if products %}
-{% for product in products %}
-<a href="{% url 'Product_About_Page' product.id %}">
+{% if product %}
 {% if product.image1 %}
 <img src="{{ product.image1.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image2.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image3.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image4.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image5.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image6.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image7.url }}">
+<br>
 {% elif product.image2 %}
 <img src="{{ product.image8.url }}">
+<br>
 {% endif %}
-</a>
+<br>
 <h1>{{ product.title }}</h1>
+<br>
 <strong>$ {{ product.price }}</strong>
 <br><br>
-{% endfor %}
 {% else %}
 <h2>Sorry products are not added yet!</h2>
 {% endif %}
