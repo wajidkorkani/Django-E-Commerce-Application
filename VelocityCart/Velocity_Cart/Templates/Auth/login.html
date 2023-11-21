@@ -1,1 +1,21 @@
-<h1>{{ text }}</h1>
+{% extends 'base.html' %}
+{% block head %}
+<title>Story Book | Login</title>
+{% endblock %}
+{% block body %}
+{% if error_message %}
+{{ error_message }}
+{% endif %}
+<div style="text-align: center; margin-top: 200px;" class="container">
+    <form class="container" method="POST">
+        {% csrf_token %}
+        <input style="text-align: center;" type="text" name="username" placeholder="username">
+        <br><br>
+        <input style="text-align: center;" type="password" name="password" placeholder="Password">
+        <br><br>
+        <button type="submit" class="btn btn-outline-primary">Login</button>
+    </form>
+    <br><br>
+    <a href="{% url 'signup' %}"><button class=" btn btn-primary">Signup</button></a>
+</div>
+{% endblock %}
