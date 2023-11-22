@@ -8,7 +8,9 @@
   <input type="text" name="search">
   <button type="submit">Submit</button>
 </form>
-
+<br>
+<br>
+<br><br><br><br>
 {% if products %}
 {% for product in products %}
 <a href="{% url 'Product_About_Page' product.id %}">
@@ -32,6 +34,8 @@
 </a>
 <h1>{{ product.title }}</h1>
 <strong>$ {{ product.price }}</strong>
+<br><br>
+<a href="{% url 'add_to_cart' product.id %}">Add to cart</a>
 <br><br>
 {% endfor %}
 {% else %}

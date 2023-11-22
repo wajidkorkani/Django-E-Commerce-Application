@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Home | Velocity Cart</title>
+{% endblock %}
+{% block body %}
+<form method="GET" action="{% url 'searchbar' %}">
+  {% csrf_token %}
+  <input type="text" name="search">
+  <button type="submit">Submit</button>
+</form>
+
+{% if cart_items %}
+{% for item in cart_items %}
+<a href="{% url 'Product_About_Page' item.product.id %}">
+{% if item.product.image1 %}
+<img src="{{ item.product.image1.url }}">
+{% elif item.product.image2 %}
+<img src="{{ product.image2.url }}">
+{% elif item.product.image2 %}
+<img src="{{ item.product.image3.url }}">
+{% elif item.product.image2 %}
+<img src="{{ item.product.image4.url }}">
+{% elif item.product.image2 %}
+<img src="{{ item.product.image5.url }}">
+{% elif item.product.image2 %}
+<img src="{{ item.product.image6.url }}">
+{% elif item.product.image2 %}
+<img src="{{ item.product.image7.url }}">
+{% elif item.product.image2 %}
+<img src="{{ item.product.image8.url }}">
+{% endif %}
+</a>
+<h1>{{ item.product.title }}</h1>
+<strong>$ {{ item.product.price }}</strong>
+<br><br>
+<a href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
+<br>
+<a href="{% url 'checkout' item.product.id %}">Checkout</a>
+{% endfor %}
+{% else %}
+<h2>Sorry products are not added yet!</h2>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Velocity Cart</title>
+{% endblock %}
+{% block body %}
+<form method="POST">
+  {% csrf_token %}
+  <input type="text" name="answer">
+  <button type="submit">Are you sure?</button>
+</form>
+{% endblock %}
