@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from Auth.forms import RigstrationForm
 import random
-from django.contrib.auth import get_user_model, login as login_user, logout, authenticate
+from django.contrib.auth import get_user_model, login, logout, authenticate
 # Create your views here.
 
 def generate_otp():
@@ -13,6 +13,7 @@ def Registration(request):
         if form.is_valid():
             request.session['signup_otp'] = generate_otp()
             request.session["signup_username"] = form.cleaned_data['username']
+            request.session["signup_email"] = form.cleaned_data['email']
             request.session['signup_fname'] = form.cleaned_data['first_name']
             request.session['signup_lname'] = form.cleaned_data['last_name']
             request.session['signup_password'] = form.cleaned_data['password1']
@@ -35,19 +36,20 @@ def verify_otp(request):
             User = get_user_model()
             user = User.objects.create_user(
                 username = request.session.get('signup_username'),
+                email = request.session.get('signup_email'),
                 first_name = request.session.get('signup_fname'),
                 last_name = request.session.get('signup_lname'),
                 password = request.session.get('signup_password')
             )
             user.save()
             return redirect('/login/')
-    else:
-        form_otp = request.session['signup_otp']
-        template = 'Auth/verify_otp.html'
-        context = {
-            'otp': f"Invalid OTP \{form_otp}",
-        }
-        return render(request, template, context)
+        else:
+            form_otp = request.session['signup_otp']
+            template = 'Auth/verify_otp.html'
+            context = {
+                'error_message': f"Invalid OTP | {form_otp}",
+            }
+            return render(request, template, context)
     form_otp = request.session['signup_otp']
     template = 'Auth/verify_otp.html'
     context = {
@@ -57,23 +59,24 @@ def verify_otp(request):
 
 
 
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login_user(request, user)
+            login(request, user)
             return redirect('/')
         else:
             template = 'Auth/login.html'
             context = {
-                'error_message':'Invalid email or password!'
+                'error_message': 'Invalid email or password!'
             }
             return render(request, template, context)
+
     template = 'Auth/login.html'
     return render(request, template)
 
-def login_user(request):
+def logout_user(request):
     logout(request)
     return redirect('/login/')

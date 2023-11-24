@@ -1,40 +1,184 @@
+<!-- product.html -->
 {% extends 'base.html' %}
+
 {% block head %}
-<title>Home | Velocity Cart</title>
+    <title>{{ product.title }} | Velocity Cart</title>
+    <style>
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slider img {
+            width: 100%;
+            height: auto;
+        }
+        #text{
+          text-align:center;
+        }
+        #slider{
+          text-align:center;
+        }
+        .product-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+        }
+
+        .product-card {
+          text-align: center;
+          margin: 10px;
+          padding: 10px;
+          border: 1px solid #ddd;
+          background-color: #fff;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          width: calc(25% - 20px); /* 25% for each card with margin included */
+          box-sizing: border-box;
+        }
+
+        .product-card img {
+          max-width: 100%;
+          height: auto;
+        }
+
+        h1 {
+          font-size: 1.5em;
+          margin: 10px 0;
+        }
+
+        strong {
+          color: #e44d26;
+        }
+        #h2{
+          text-align:center;
+        }
+
+    </style>
 {% endblock %}
+
 {% block body %}
-{% if product %}
-{% if product.image1 %}
-<img src="{{ product.image1.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image2.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image3.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image4.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image5.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image6.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image7.url }}">
-<br>
-{% elif product.image2 %}
-<img src="{{ product.image8.url }}">
-<br>
-{% endif %}
-<br>
-<h1>{{ product.title }}</h1>
-<br>
-<strong>$ {{ product.price }}</strong>
-<br><br>
-{% else %}
-<h2>Sorry products are not added yet!</h2>
-{% endif %}
+{% include 'navbar.html' %}
+    {% if product %}
+    <div id="carouselExample" class="carousel slide">
+      <div class="carousel-inner">
+        {% if product.image1 %}
+        <div class="carousel-item active">
+          <img src="{{ product.image1.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image2 %}
+        <div class="carousel-item">
+          <img src="{{ product.image2.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image3 %}
+        <div class="carousel-item">
+          <img src="{{ product.image3.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image4 %}
+        <div class="carousel-item">
+          <img src="{{ product.image4.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image5 %}
+        <div class="carousel-item">
+          <img src="{{ product.image5.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image6 %}
+        <div class="carousel-item">
+          <img src="{{ product.image6.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image7 %}
+        <div class="carousel-item">
+          <img src="{{ product.image7.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+        {% if product.image8 %}
+        <div class="carousel-item">
+          <img src="{{ product.image8.url }}" class="d-block w-100">
+        </div>
+        {% endif %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+  </div>
+        <br>
+        <div id="text">
+          <h1>{{ product.title }}</h1>
+          <br>
+          <strong>$ {{ product.price }}</strong>
+          <br>
+          <br>
+          {% if user.is_authenticated %}
+          <a href="{% url 'add_to_cart' product.id %}" class="btn"><button class="btn btn-outline-warning">Add to cart</button></a> <a href="{% url 'checkout' product.id %}" class="btn"><button class="btn btn-outline-success">Buy now</button></a>
+          {% else %}
+          <a href="{% url 'login' %}" class="btn"><button class="btn btn-outline-warning">Add to cart</button></a> <a href="{% url 'login' %}" class="btn"><button class="btn btn-outline-success">Buy now</button></a>
+          {% endif %}
+          <br><br>
+          <p>{{ product.description }}</p>
+      </div>
+      <br>
+      <br>
+      <h2 id="h2">Related products</h2>
+        <br><br>
+        <div class="product-container">
+          {% if related_products %}
+            {% for related_product in related_products %}
+              <div class="product-card">
+                <a href="{% url 'Product_About_Page' related_product.id %}">
+                  {% if related_product.image1 %}
+                    <img src="{{ related_product.image1.url }}">
+                  {% endif %}
+                </a>
+                <h1>{{ related_product.title }}</h1>
+                <strong>$ {{ related_product.price }}</strong>
+                <br>
+              </div>
+            {% endfor %}
+            {% else %}
+            <h2>No related products</h2>
+          {% endif %}
+        </div>
+    {% else %}
+        <h2>Sorry, products are not added yet!</h2>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            var slider = $('.slider');
+            var currentIndex = 0;
+
+            function showSlide() {
+                var translateValue = -currentIndex * 100 + '%';
+                slider.css('transform', 'translateX(' + translateValue + ')');
+            }
+
+            $('.next-btn').click(function () {
+                currentIndex = (currentIndex + 1) % $('.slider img').length;
+                showSlide();
+            });
+
+            $('.prev-btn').click(function () {
+                currentIndex = (currentIndex - 1 + $('.slider img').length) % $('.slider img').length;
+                showSlide();
+            });
+        });
+    </script>
 {% endblock %}

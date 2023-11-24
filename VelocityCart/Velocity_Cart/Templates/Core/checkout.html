@@ -1,11 +1,57 @@
 {% extends 'base.html' %}
+
 {% block head %}
-<title>Velocity Cart</title>
+  <title>Velocity Cart</title>
+  <style>
+    .checkout-form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+      background-color: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkout-form button {
+      width: 100%;
+    }
+
+    .checkout-form input {
+      text-align : center;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    p {
+      background-color: gray;
+    }
+    h1{
+      color:blue;
+      text-align:center;
+    }
+    #time_stamp{
+      display:none;
+    }
+  </style>
 {% endblock %}
+
 {% block body %}
-<form method="POST">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit">Submit</button>
-</form>
+  <br>
+  <br>
+  <h1>Checkout</h1>
+  <br>
+  <form method="POST" class="checkout-form">
+    {% csrf_token %}
+    <input type="number" name="quantity" placeholder="Quantity">
+    <input type="text" name="color" placeholder="Color">
+    <input type="text" name="buyer_phone" placeholder="Enter your phone number">
+    <input type="email" name="buyer_email" placeholder="Enter your email">
+    <input type="text" name="buyer_address" placeholder="Enter your address">
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
 {% endblock %}
