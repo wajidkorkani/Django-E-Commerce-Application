@@ -70,11 +70,11 @@
 
 {% block body %}
   {% include 'navbar.html' %}
-  {% if poster %}
-          <div >
-            <img src="{{ poster.image.url }}" class="d-block w-100">
-          </div>
-  {% endif %}
+    {% if poster %}
+      <div >
+          <img src="{{ poster.image.url }}" class="d-block w-100">
+      </div>
+      {% endif %}
   <br><br>
   <div class="product-container">
     {% if products %}

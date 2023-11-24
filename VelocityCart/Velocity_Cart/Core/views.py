@@ -52,7 +52,7 @@ def Searchbar(request):
 
 
 def cart(request):
-    cart_items = CartItem.objects.all()
+    cart_items = CartItem.objects.filter(buyer=request.user.id)
     template = 'Core/cart.html'
     context = {
         'cart_items' : cart_items,
@@ -75,13 +75,14 @@ def increase_quantity(request, pk):
         item = items
         item.quantity += 1
         item.save()
-    return redirect('/cart/')
+    return redirect('cart')
 
 
 def remove_from_cart(request, pk):
     product = Product.objects.get(id=pk)
-    items = CartItem.objects.get(product=product)
-    items.delete()
+    items = CartItem.objects.filter(product=product, buyer=request.user)
+    for item in items:
+        item.delete()
     return redirect('/cart/')
 
 def checkout(request, pk):
