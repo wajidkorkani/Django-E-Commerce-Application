@@ -85,12 +85,10 @@
               <img src="{{ item.product.image1.url }}" alt="{{ item.product.title }}">
             {% endif %}
           </a>
-          <div class="product-details">
-            <h2 class="product-title">{{ item.product.title }}</h2>
+          <div class="product-details"><br>
+            <h2 class="product-title">{{ item.product.title }}</h2><br>
             <p class="product-price">$ {{ item.product.price }}</p>
-            <p>{{ item.product.quantity }}</p>
             <br>
-            <a href="{% url 'increase_quantity' item.product.id %}" class='btn'>Plus</a>
             <div class="actions">
               <a href="{% url 'checkout' item.product.id %}" class="btn btn-outline-success">Checkout</a>
               <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-outline-danger">Remove</a>

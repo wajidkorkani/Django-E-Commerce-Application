@@ -50,5 +50,23 @@ class PurchaseProduct(models.Model):
     def __str__(self):
         return f"{self.buyer_name} - {self.product.title}"
 
+class ProductComments(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    comment = models.CharField(max_length=1000)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
+class CommentReply(models.Model):
+    comment = models.ForeignKey(ProductComments, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    reply = models.CharField(max_length=1000)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
 class HomePageImage(models.Model):
     image = models.ImageField(upload_to='media/', blank=True)

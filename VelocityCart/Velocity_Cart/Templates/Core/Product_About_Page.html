@@ -59,7 +59,46 @@
           text-align:center;
         }
 
-    </style>
+        .comment-form {
+          text-align : center;
+          max-width: 800px;
+          margin: 50px auto;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-form label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: bold;
+        }
+
+        .comment-form input[type="text"] {
+          width: 100%;
+          text-align: center;
+          padding: 10px;
+          margin-bottom: 16px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+
+        .comment-form button {
+          text-align : center;
+          background-color: blue;
+          color: #fff;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .comment-form button:hover {
+          background-color: #45a049;
+        }
+      </style>
 {% endblock %}
 
 {% block body %}
@@ -132,6 +171,32 @@
           <br><br>
           <p>{{ product.description }}</p>
       </div>
+      <br><br>
+      <div class="comment-form">
+        <div class="container">
+          {% if comments %}
+            {% for comment in comments %}
+            <strong>{{ comment.user }}</strong>
+            <br>
+            <p>{{ comment.comment }}</p>
+            <br>
+            <p>{{ comment.time_stamp }}</p>
+            <br>
+            <br>
+            <a class="btn" href="{% url 'comments_replys_page' comment.id %}">Replys</a>
+            <br>
+            <br>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <br><br>
+          <form method="POST" action="{% url 'product_comment' product.id %}">
+            {% csrf_token %}
+            <input type="text" id="comment" name="comment" required placeholder="Type your comment">
+            <br>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
       <br>
       <br>
       <h2 id="h2">Related products</h2>
@@ -157,28 +222,4 @@
     {% else %}
         <h2>Sorry, products are not added yet!</h2>
     {% endif %}
-{% endblock %}
-
-{% block script %}
-    <script>
-        $(document).ready(function () {
-            var slider = $('.slider');
-            var currentIndex = 0;
-
-            function showSlide() {
-                var translateValue = -currentIndex * 100 + '%';
-                slider.css('transform', 'translateX(' + translateValue + ')');
-            }
-
-            $('.next-btn').click(function () {
-                currentIndex = (currentIndex + 1) % $('.slider img').length;
-                showSlide();
-            });
-
-            $('.prev-btn').click(function () {
-                currentIndex = (currentIndex - 1 + $('.slider img').length) % $('.slider img').length;
-                showSlide();
-            });
-        });
-    </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Categorey, CartItem, PurchaseProduct, HomePageImage
-from .forms import BuyForm
+from .models import Product, Categorey, CartItem, PurchaseProduct, HomePageImage, ProductComments, CommentReply
+from .forms import BuyForm, CommenForm
 from django.utils import timezone
 from django.contrib.auth.models import User
 # Create your views here.
@@ -29,13 +29,58 @@ def Home(request):
 def Product_About_Page(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     categorey = product.categorey.name
+    comments = ProductComments.objects.filter(product=product)
     related_products = Product.objects.filter(categorey__name=categorey)
     template = 'Core/Product_About_Page.html'
     context = {
         'product' : product,
         'related_products' : related_products,
+        'comments' : comments,
     }
     return render(request, template, context)
+
+def Comments_Replys_Page(request, pk):
+    comment = get_object_or_404(ProductComments, id=pk)
+    replys = CommentReply.objects.filter(comment=comment)
+    template = 'Core/comments_replys.html'
+    context = {
+        'comment' : comment,
+        'replys' : replys,
+    }
+    return render(request, template, context)
+
+def Product_Comments(request, pk):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == "POST":
+        form = request.POST['comment']
+        data, created = ProductComments.objects.get_or_create(
+            product = get_object_or_404(Product, id=pk),
+            user = request.user,
+            comment = form,
+            time_stamp = timezone.now(),
+        )
+        if created:
+            data.save()
+        return redirect(url)
+    else:
+        return redirect(url)
+
+def Comments_Replys(request, pk):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == "POST":
+        form = request.POST['reply']
+        data, created = CommentReply.objects.get_or_create(
+            comment = get_object_or_404(ProductComments, id=pk),
+            user = request.user,
+            reply = form,
+            time_stamp = timezone.now(),
+        )
+        if created:
+            data.save()
+        return redirect(url)
+    else:
+        return redirect(url)
+
 
 
 def Searchbar(request):
@@ -67,15 +112,6 @@ def add_to_cart(request, pk):
         items.quantity += 1
         items.save()
     return redirect('/cart/')
-
-def increase_quantity(request, pk):
-    product = Product.objects.get(id=pk)
-    items = CartItem.objects.get_or_create(product=product, buyer_id=request.user.id)
-    if not items:
-        item = items
-        item.quantity += 1
-        item.save()
-    return redirect('cart')
 
 
 def remove_from_cart(request, pk):
