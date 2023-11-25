@@ -4,6 +4,6 @@ from Auth.views import *
 urlpatterns = [
     path('registration-form/', Registration, name='signup'),
     path('otp/', verify_otp, name='verify_otp'),
-    path('login/', login, name='login'),
-    path('logout/', login_user, name='login_user')
+    path('login/', login_view, name='login'),
+    path('logout/', logout_user, name='logout_user')
 ]
