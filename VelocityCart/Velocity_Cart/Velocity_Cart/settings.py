@@ -66,8 +66,12 @@ WSGI_APPLICATION = 'Velocity_Cart.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends. ',
+        'NAME': 'yourdbname',
+        'USER': 'yourdbuser',
+        'PASSWORD': 'yourdbpassword',
+        'HOST': '',
+        'PORT': '',
     }
 }
 

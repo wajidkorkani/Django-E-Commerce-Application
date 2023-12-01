@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+
 {% block head %}
+
   <title>Velocity Cart</title>
+
   <style>
+
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f4f4f4;
@@ -10,19 +14,23 @@
       text-align: center;
     }
 
+
     h1 {
       color: #333;
       margin-top: 50px;
     }
+
 
     form {
       display: inline-block;
       margin-top: 20px;
     }
 
+
     input[type="text"] {
       display: none; /* Hide the input fields */
     }
+
 
     #yes {
       padding: 10px 20px;
@@ -33,6 +41,8 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+
     #no {
       padding: 10px 20px;
       font-size: 16px;
@@ -43,25 +53,41 @@
       cursor: pointer;
     }
 
+
     #yes:hover {
       background-color: #45a049;
     }
+
+
     #no:hover {
       background-color: red;
     }
+
   </style>
+
 {% endblock %}
 
 {% block body %}
-  <h1>Are you sure?</h1>
+
+  <h1>Are you sure?</h1><br>
+
   <form method="POST">
+
     {% csrf_token %}
+
     <input type="text" name="answer" value="yes">
     <button id="yes" type="submit">Yes</button>
+
   </form>
+
+
   <form method="POST">
+
     {% csrf_token %}
+
     <input type="text" name="answer" value="no">
     <button id='no' type="submit">No</button>
+
   </form>
+
 {% endblock %}

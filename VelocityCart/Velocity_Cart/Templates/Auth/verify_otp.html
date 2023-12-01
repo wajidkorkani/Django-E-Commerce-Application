@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
+
 {% block head %}
+
   <title>Velocity Cart | OTP</title>
+
+
   <style>
+
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f4f4f4;
@@ -13,6 +18,7 @@
       height: 100vh;
     }
 
+
     form {
       background-color: #fff;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,6 +27,7 @@
       width: 300px;
       text-align: center; /* Center the content horizontally */
     }
+
 
     input {
       text-align:center;
@@ -33,6 +40,7 @@
       font-size: 16px;
     }
 
+
     button {
       background-color: #3498db;
       color: #fff;
@@ -43,23 +51,38 @@
       font-size: 16px;
     }
 
+
     button:hover {
       background-color: #45a049;
     }
+
      #error_message{
        color:red;
      }
+
   </style>
+
 {% endblock %}
+
+
 {% block body %}
+
   <form method="POST">
+
     {% csrf_token %}
+
+
     {% if otp %}
       <p>{{ otp }}</p>
+      <br>
     {% else %}
-    <p id="error_message">{{ error_message }}</p>
+    <p id="error_message">{{ error_message }}</p><br>
     {% endif %}
+
+
     <input type="text" name="otp" placeholder="Enter OTP">
     <button type="submit">Submit</button>
+
   </form>
+
 {% endblock %}

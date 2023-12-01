@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+
 {% block head %}
+
 <title>Story Book | Login</title>
+
+
 <style>
+
+
   body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -14,6 +20,7 @@
     color: #333;
   }
 
+
   .container {
     max-width: 400px;
     background-color: #fff;
@@ -23,15 +30,18 @@
     box-sizing: border-box;
   }
 
+
   h2 {
     text-align: center;
     color: #3498db;
   }
 
+
   form {
     display: flex;
     flex-direction: column;
   }
+
 
   input {
     text-align:center;
@@ -47,13 +57,17 @@
     transition: border-color 0.3s ease;
   }
 
+
   input::placeholder {
     color: #777;
   }
 
+
+
   input:focus {
     border-color: #3498db;
   }
+
 
   button {
     background-color: #3498db;
@@ -66,15 +80,28 @@
     transition: background-color 0.3s ease;
   }
 
+
+
   button:hover {
     background-color: #2577b5;
+
+
   }
+
+
 </style>
+
 {% endblock %}
+
+
 {% block body %}
+
+
 {% if error_message %}
 {{ error_message }}
 {% endif %}
+<br>
+
 <div>
     <form class="container" method="POST">
         {% csrf_token %}
@@ -87,4 +114,6 @@
     <br>
     <p> Don't have an account? <a href="{% url 'signup' %}"><button class=" btn btn-primary">Signup</button></a></p>
 </div>
+
+
 {% endblock %}
