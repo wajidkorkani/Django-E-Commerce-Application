@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
+
 {% block head %}
+
   <title>Search</title>
+
   <style>
-    /* Add your custom CSS styles here */
+
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f4f4f4;
       margin: 0;
       padding: 0;
     }
+
 
     .navbar {
       background-color: #333;
@@ -17,11 +21,13 @@
       text-align: center;
     }
 
+
     .product-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
     }
+
 
     .product-card {
       text-align: center;
@@ -35,59 +41,77 @@
       box-sizing: border-box;
     }
 
+
     .product-card img {
       max-width: 100%;
       height: auto;
     }
+
 
     h1 {
       font-size: 1.5em;
       margin: 10px 0;
     }
 
+
     strong {
       color: #e44d26;
     }
+
 
     #poster {
       max-width: 100%;
     }
 
-    /* Media queries for responsive design */
+
     @media only screen and (max-width: 768px) {
       .product-card {
         width: calc(50% - 20px); /* 50% for each card with margin included */
       }
     }
 
+
     @media only screen and (max-width: 480px) {
       .product-card {
         width: calc(100% - 20px); /* 100% for each card with margin included */
       }
     }
+
   </style>
+
 {% endblock %}
 
 {% block body %}
+
   {% include 'navbar.html' %}
+
   <br>
   <div class="product-container">
+
     {% if products %}
+
       {% for product in products %}
+
         <div class="product-card">
           <a href="{% url 'Product_About_Page' product.id %}">
+
             {% if product.image1 %}
               <img src="{{ product.image1.url }}" alt="{{ product.title }}">
             {% endif %}
           </a>
+
           <h1>{{ product.title }}</h1>
           <strong>$ {{ product.price }}</strong>
+
         </div>
       {% endfor %}
     {% endif %}
   </div>
   <br>
+
   <div class="product-container">
+
+
     {% if product_categoery %}
       {% for product in product_categoery %}
         <div class="product-card">
@@ -102,4 +126,5 @@
       {% endfor %}
     {% endif %}
   </div>
+
 {% endblock %}

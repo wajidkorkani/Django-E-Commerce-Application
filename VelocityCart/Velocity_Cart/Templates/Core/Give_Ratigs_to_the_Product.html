@@ -1,0 +1,327 @@
+<!-- product.html -->
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <title>{{ product.title }} | Velocity Cart</title>
+
+    <style>
+
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+
+        .slider img {
+            width: 100%;
+            height: auto;
+        }
+
+
+        #text{
+          text-align:center;
+        }
+
+
+        #slider{
+          text-align:center;
+        }
+
+
+        .product-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+        }
+
+
+        .product-card {
+          text-align: center;
+          margin: 10px;
+          padding: 10px;
+          border: 1px solid #ddd;
+          background-color: #fff;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          width: calc(25% - 20px); /* 25% for each card with margin included */
+          box-sizing: border-box;
+        }
+
+
+        .product-card img {
+          max-width: 100%;
+          height: auto;
+        }
+
+
+        h1 {
+          font-size: 1.5em;
+          margin: 10px 0;
+        }
+
+
+        strong {
+          color: #e44d26;
+        }
+
+
+        #h2{
+          text-align:center;
+        }
+
+
+        .comment-form {
+          text-align : center;
+          max-width: 800px;
+          margin: 50px auto;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .comment-form label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: bold;
+        }
+
+
+        .comment-form input[type="text"] {
+          width: 100%;
+          text-align: center;
+          padding: 10px;
+          margin-bottom: 16px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+
+
+        .comment-form button {
+          text-align : center;
+          background-color: blue;
+          color: #fff;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+
+        .comment-form button:hover {
+          background-color: #45a049;
+        }
+
+      </style>
+
+{% endblock %}
+
+{% block body %}
+
+{% include 'navbar.html' %}
+
+    {% if product %}
+
+    <div id="carouselExample" class="carousel slide">
+      <div class="carousel-inner">
+
+        {% if product.image1 %}
+        <div class="carousel-item active">
+          <img src="{{ product.image1.url }}" class="d-block w-100">
+        </div>
+
+        {% endif %}
+
+        {% if product.image2 %}
+
+
+        <div class="carousel-item">
+          <img src="{{ product.image2.url }}" class="d-block w-100">
+        </div>
+
+        {% endif %}
+
+        {% if product.image3 %}
+
+        <div class="carousel-item">
+          <img src="{{ product.image3.url }}" class="d-block w-100">
+        </div>
+
+        {% endif %}
+
+        {% if product.image4 %}
+
+        <div class="carousel-item">
+          <img src="{{ product.image4.url }}" class="d-block w-100">
+        </div>
+
+
+        {% endif %}
+
+
+        {% if product.image5 %}
+
+
+        <div class="carousel-item">
+          <img src="{{ product.image5.url }}" class="d-block w-100">
+        </div>
+
+
+        {% endif %}
+
+
+        {% if product.image6 %}
+
+        <div class="carousel-item">
+          <img src="{{ product.image6.url }}" class="d-block w-100">
+        </div>
+
+
+        {% endif %}
+
+        {% if product.image7 %}
+
+        <div class="carousel-item">
+          <img src="{{ product.image7.url }}" class="d-block w-100">
+        </div>
+
+        {% endif %}
+
+        {% if product.image8 %}
+
+        <div class="carousel-item">
+          <img src="{{ product.image8.url }}" class="d-block w-100">
+        </div>
+
+        {% endif %}
+
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+
+
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+
+  </div>
+        <br>
+
+
+        <div id="text">
+
+          <h1>{{ product.title }}</h1>
+
+          <br>
+
+          <strong>$ {{ product.price }}</strong>
+
+          <br><br>
+
+          {% if purchased %}
+
+            {% if user.is_authenticated %}
+
+            <style>
+
+                .stars-container {
+                    display: flex;
+                    justify-content: center;
+                }
+
+
+
+                .star {
+                    cursor: pointer;
+                    font-size: 24px;
+                    color: #ddd;
+                    margin-right: 20px;
+                    position: relative;
+                }
+
+
+
+                .star::before {
+                    content: '★';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    color: #ddd;
+                }
+
+
+                .star.checked::before,
+                .star.checked::before {
+                    color: gold;
+                }
+
+
+            </style>
+
+
+            <form action="{% url 'product_ratings' id %}" method="POST" id="ratingForm">
+
+              {% csrf_token %}
+
+
+                <div class="stars-container">
+                    <input class="star" id="starRating1" type="checkbox" name="one" value="0.5">
+                    <input type="checkbox" class="star" id="starRating2" name="two" value="0.5">
+                    <input type="checkbox" class="star" id="starRating3" name="three" value="0.5">
+                    <input type="checkbox" class="star" id="starRating4" name="four" value="0.5">
+                    <input type="checkbox" class="star" id="starRating5" name="five" value="0.5">
+                    <input class="star" id="starRating6" type="checkbox" name="six" value="0.5">
+                    <input type="checkbox" class="star" id="starRating7" name="seven" value="0.5">
+                    <input type="checkbox" class="star" id="starRating8" name="eight" value="0.5">
+                    <input type="checkbox" class="star" id="starRating9" name="nine" value="0.5">
+                    <input type="checkbox" class="star" id="starRating10" name="ten" value="0.5">
+                </div>
+
+                <br><br>
+
+
+                <button type="submit" class="btn btn-outline-dark">Submit</button>
+                <br><br>
+            </form>
+
+
+            <script>
+                document.querySelectorAll('.stars-container .star').forEach(function(star) {
+                    star.addEventListener('click', function () {
+                        // Reset the class for all stars
+                        document.querySelectorAll('.stars-container .star').forEach(function(star) {
+                            star.classList.remove('checked');
+                        });
+
+                        // Change the class for the clicked star and all previous stars
+                        var clickedIndex = Array.from(this.parentElement.children).indexOf(this);
+                        for (var i = 0; i <= clickedIndex; i++) {
+                            this.parentElement.children[i].classList.add('checked');
+                        }
+                    });
+                });
+            </script>
+
+
+          {% endif %}
+
+          <br><br>
+
+          {% endif %}
+
+          {% endif %}
+
+{% endblock %}
