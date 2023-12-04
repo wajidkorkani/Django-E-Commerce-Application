@@ -22,6 +22,8 @@ from django.contrib.auth.models import User
 from .forms import BuyForm
 
 from django.contrib.auth.decorators import login_required
+
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -327,46 +329,71 @@ def checkout(request, pk):
 
 # Buying the product
 def buy_now(request):
+        if request.method == "POST":
+            answer = request.POST.get('answer')
 
-    if request.method == "POST":
-        answer = request.POST.get('answer')
+            if answer == 'yes':
+                product_id = request.session.get('product')
+                cart_id = request.session.get('cart')
 
-        if answer == 'yes':
-            product_id = request.session.get('product')
-            cart_id = request.session.get('cart')
+                if product_id is not None:
+                    product = get_object_or_404(Product, id=product_id)
+                    buyer = get_object_or_404(User, id=request.user.id)
+                    purchase_data, created = PurchaseProduct.objects.get_or_create(
+                        product=product,
+                        product_id_number=product.id,
+                        buyer=buyer,
+                        buyer_name=f"{buyer.first_name} {buyer.last_name}",
+                        registration_email=buyer.email,
+                        quantity=request.session.get('product_quantity'),
+                        color=request.session.get('product_color'),
+                        size=request.session.get('product_size'),
+                        buyer_phone=request.session.get('buyer_phone'),
+                        buyer_email=request.session.get('buyer_email'),
+                        buyer_address=request.session.get('buyer_address'),
+                        time_stamp=timezone.now()
+                    )
 
-            if product_id is not None:
-                product = get_object_or_404(Product, id=product_id)
-                buyer = get_object_or_404(User, id=request.user.id)
-                purchase_data, created = PurchaseProduct.objects.get_or_create(
-                    product=product,
-                    product_id_number=product.id,
-                    buyer=buyer,
-                    buyer_name=f"{buyer.first_name} {buyer.last_name}",
-                    registration_email=buyer.email,
-                    quantity=request.session.get('product_quantity'),
-                    color=request.session.get('product_color'),
-                    size=request.session.get('product_size'),
-                    buyer_phone=request.session.get('buyer_phone'),
-                    buyer_email=request.session.get('buyer_email'),
+                    if created:
+                        purchase_data.save()
+
+                        try:
+                            items = CartItem.objects.filter(product=product)
+                            for item in items:
+                                item.delete()
+
+                        except CartItem.DoesNotExist:
+                            pass
+                    quantity=request.session.get('product_quantity')
+                    color=request.session.get('product_color')
+                    size=request.session.get('product_size')
+                    buyer_phone=request.session.get('buyer_phone')
+                    buyer_email=request.session.get('buyer_email')
                     buyer_address=request.session.get('buyer_address'),
-                    time_stamp=timezone.now()
-                )
 
-                if created:
-                    purchase_data.save()
 
-                    try:
-                        item = CartItem.objects.get(product=product)
-                        item.delete()
+                    send_mail(
+                        'Product Details',
+                        f"Thanks for shopping {request.user.first_name} {request.user.last_name} \n Here are product details \n Name : {product.title} \n Quantity : {quantity} \n Color : {color} \n Size : {size} \n Total price : ${quantity * product.price}  \n Your phone number : {buyer_phone} \n Your email address : {buyer_email} \n Your address : {buyer_address} \n Payment : Payment is on delivery. \n Delivery : The product will be deliverd within 10 days to the given address. \n Thanks for shopping. \n Thanks for testing this Velocity Cart and of course this was just a test email and this product will not be delivered to you. ",
+                        'Velocity Cart',
+                        [buyer_email, request.user.email],
+                        fail_silently=False,
+                    )
 
-                    except CartItem.DoesNotExist:
-                        pass
 
-                return redirect('/give-ratings/')
+                    send_mail(
+                        'Product Details',
+                        f"{request.user.first_name} {request.user.last_name} has just placed his/her first order \n Here are product details \n Name : {product.title} \n Quantity : {quantity} \n Color : {color} \n Size : {size} \n Total price : ${quantity * product.price}  \n Phone number : {buyer_phone} \n Registared email address : {request.user.email} \n Given Email address : {buyer_email} \n Address : {buyer_address} \n Delivery : The product must be deliverd within 10 days to the given address.",
+                        'Velocity Cart',
+                        {'Your email here'},
+                        fail_silently=False,
+                    )
 
-        elif answer == 'no':
-            return redirect('cart')
 
-    template = 'Core/buye_now.html'
-    return render(request, template)
+                    return redirect('/give-ratings/')
+
+            elif answer == 'no':
+                return redirect('cart')
+
+        template = 'Core/buye_now.html'
+        return render(request, template)

@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
 
-from Auth.forms import RigstrationForm
-
 import random
 
 from django.contrib.auth import (
@@ -11,41 +9,121 @@ from django.contrib.auth import (
     authenticate
     )
 
+from django.core.mail import send_mail
+
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+    )
+
+
 # Create your views here.
 
-
-
+# Generate OTP code
 def generate_otp():
     return str(random.randint(1000, 9999))
 
 
-# Getting data from registration form filled by new user
+
 def Registration(request):
 
     if request.method == "POST":
-        form = RigstrationForm(request.POST)
+
+        # Getting data from form
+        username = request.POST['username']
+        email = request.POST['email']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        otp = generate_otp()
+
+        # If the username is already in use
+        if get_user_model().objects.filter(username=username).exists():
+            form = RigstrationForm()
+            template = 'Auth/signup_form.html'
+            context = {
+                'error_message' : 'Sorry this user name is already in use.',
+                "error_message2" : "Please try an other username."
+            }
+            return render(request, template, context)
 
 
-        if form.is_valid():
-            request.session['signup_otp'] = generate_otp()
-            request.session["signup_username"] = form.cleaned_data['username']
-            request.session["signup_email"] = form.cleaned_data['email']
-            request.session['signup_fname'] = form.cleaned_data['first_name']
-            request.session['signup_lname'] = form.cleaned_data['last_name']
-            request.session['signup_password'] = form.cleaned_data['password1']
+        # If the email is already in use
+        elif get_user_model().objects.filter(email=email).exists():   # If the email is already in use than user will not be able to create an account.
+
+            template = 'Auth/signup_form.html'
+            context = {
+            'error_message': 'Sorry this email is already in use.',
+            'error_message2': 'Please try and other email.',
+            }
+            return render(request, template, context)
+
+
+        # If first name field is empty
+        elif len(first_name) <= 1 :
+            template = 'Auth/signup_form.html'
+            context = {
+                'error_message' : "Sorry first name can't be empty.",
+                "error_message2" : "Please fill all the fields."
+            }
+            return render(request, template, context)
+
+
+        # If last name field is empty
+        elif len(last_name) < 1 :
+            template = 'Auth/signup_form.html'
+            context = {
+                'error_message' : "Sorry last name can't be empty.",
+                "error_message2" : "Please fill all the fields."
+            }
+            return render(request, template, context)
+
+
+
+        # If both passwords are not same
+        elif password1 != password2:
+            template = 'Auth/signup_form.html'
+            context = {
+                'error_message' : 'Sorry passwords are not same.',
+                "error_message2" : "Please make sure that both passwords are same."
+            }
+            return render(request, template, context)
+
+
+        # If password is less than eight characters
+        elif len(password1) < 8:
+            template = 'Auth/signup_form.html'
+            context = {
+                'error_message' : 'Weak password',
+                "error_message2" : "Your password must be equal to the 8 characters."
+            }
+            return render(request, template, context)
+
+
+        # If everthing is fine than the proccess will be continue and OTP code email will be sent to the user on given email by user after entering the wright OTP code user account will be created.
+        else:
+            send_mail(
+                'Velocity Cart otp',
+                f'This is your otp to create your account on Velocity Cart: {otp}',
+                'Velocity Cart',
+                [email],
+                fail_silently=False,
+            )
+            request.session['signup_otp'] = otp
+            request.session["signup_username"] = username.lower()
+            request.session["signup_email"] = email
+            request.session['signup_fname'] = first_name
+            request.session['signup_lname'] = last_name
+            request.session['signup_password'] = password1
             return redirect('/otp/')
 
 
-    else:
-        form = RigstrationForm()
-
-
-
     template = 'Auth/signup_form.html'
-    context = {
-        'form': form,
-    }
-    return render(request, template, context)
+    return render(request, template)
+
 
 
 
@@ -69,14 +147,14 @@ def verify_otp(request):
             )
 
             user.save()                           # Saving the user
-            return redirect('/login/')
+            return redirect('/accounts/login/')
 
 
         else:
             form_otp = request.session['signup_otp']
             template = 'Auth/verify_otp.html'
             context = {
-                'error_message': f"Invalid OTP | {form_otp}",
+                'error_message': f"Invalid OTP",
             }
             return render(request, template, context)
 
@@ -85,7 +163,7 @@ def verify_otp(request):
     form_otp = request.session['signup_otp']
     template = 'Auth/verify_otp.html'
     context = {
-        'otp': form_otp,
+        'otp': 'Please enter OTP code we sent to your email account.',
     }
     return render(request, template, context)
 
@@ -113,4 +191,28 @@ def login_view(request):
 # Loging user out
 def logout_user(request):
     logout(request)
-    return redirect('/login/')
+    return redirect('/accounts/login/')
+
+
+
+
+# Password reset section
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'Auth/password_reset_form.html'
+    email_template_name = 'Auth/password_reset_email.html'
+    success_url = '/password_reset/done/'
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'Auth/password_reset_done.html'
+
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'Auth/password_reset_confirm.html'
+    success_url = '/reset/done/'
+
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'Auth/password_reset_complete.html'

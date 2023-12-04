@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'Velocity_Cart.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends. ',
+        'ENGINE': 'django.db.backends......',
         'NAME': 'yourdbname',
         'USER': 'yourdbuser',
         'PASSWORD': 'yourdbpassword',
@@ -116,6 +116,19 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+
+# Emal settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = ''
+EMAIL_PORT = ""
+EMAIL_USE_TLS = ""
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
