@@ -84,6 +84,11 @@
       background-color: #2577b5;
     }
 
+
+    #error_message{
+      color: red;
+    }
+
   </style>
 
 {% endblock %}
@@ -94,22 +99,25 @@
 
   <div class="container">
     <h2>Registration</h2>
-    <br>
+    {% if error_message %}
+      <p id="error_message">{{ error_message }}</p>
+      <p id="error_message">{{ error_message2 }}</p>
+    {% endif %}
 
     <form method="POST">
       {% csrf_token %}
 
-      <input type="text" name="{{ form.username.name }}" placeholder="Username">
+      <input type="text" name="username" placeholder="Username">
 
-      <input type="text" name="{{ form.email.name }}" placeholder="Email">
+      <input type="email" name="email" placeholder="Email">
 
-      <input type="text" name="{{ form.first_name.name }}" placeholder="First Name">
+      <input type="text" name="first_name" placeholder="First Name" required>
 
-      <input type="text" name="{{ form.last_name.name }}" placeholder="Last Name">
+      <input type="text" name="last_name" placeholder="Last Name" required>
 
-      <input type="password" name="{{ form.password1.name }}" placeholder="Password">
+      <input type="password" name="password1" placeholder="Password">
 
-      <input type="password" name="{{ form.password2.name }}" placeholder="Confirm Password">
+      <input type="password" name="password2" placeholder="Confirm Password">
 
       <button type="submit">Register</button>
       <br>

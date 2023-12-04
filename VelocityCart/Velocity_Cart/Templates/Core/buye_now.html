@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
   <title>Velocity Cart</title>
-
   <style>
-
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f4f4f4;
@@ -14,80 +11,88 @@
       text-align: center;
     }
 
-
     h1 {
       color: #333;
       margin-top: 50px;
     }
-
 
     form {
       display: inline-block;
       margin-top: 20px;
     }
 
-
     input[type="text"] {
       display: none; /* Hide the input fields */
     }
 
-
-    #yes {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-
+    #yes,
     #no {
       padding: 10px 20px;
       font-size: 16px;
-      background-color: #ff0e0e;
-      color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
 
+    #yes {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    #no {
+      background-color: #ff0e0e;
+      color: #fff;
+    }
 
     #yes:hover {
       background-color: #45a049;
     }
 
-
     #no:hover {
       background-color: red;
     }
 
+    #loading {
+      display: none;
+      margin-top: 20px;
+    }
   </style>
-
 {% endblock %}
 
 {% block body %}
+  <h1>Are you sure?</h1><br><br>
 
-  <h1>Are you sure?</h1><br>
 
-  <form method="POST">
+  <br>
 
+  <form id="confirmationForm" method="POST">
     {% csrf_token %}
-
     <input type="text" name="answer" value="yes">
-    <button id="yes" type="submit">Yes</button>
-
+    <button id="yes" type="button" onclick="showLoading()">Yes</button>
   </form>
-
 
   <form method="POST">
-
     {% csrf_token %}
-
     <input type="text" name="answer" value="no">
-    <button id='no' type="submit">No</button>
-
+    <button id='no' type="button" onclick="showLoading()">No</button>
   </form>
 
+  <div id="loading">Loading...</div>
+
+
+  <script>
+    function showLoading() {
+      // Hide the buttons
+      document.getElementById('yes').style.display = 'none';
+      document.getElementById('no').style.display = 'none';
+
+      // Show the loading element
+      document.getElementById('loading').style.display = 'block';
+
+      // Submit the form after a delay (simulate asynchronous operation)
+      setTimeout(function () {
+        document.getElementById('confirmationForm').submit();
+      }, 1000); // Adjust the delay as needed
+    }
+  </script>
 {% endblock %}
