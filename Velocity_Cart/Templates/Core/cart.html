@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+  <title>Home | Velocity Cart</title>
+
+  <style>
+
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    .navbar {
+      background-color: #444;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+
+    .cart-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .cart-item {
+      margin-bottom: 20px;
+    }
+
+
+    .cart-item img {
+      max-width: 100%;
+      height: auto;
+    }
+
+
+    .product-details {
+      text-align: center;
+    }
+
+
+    .product-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+
+    .product-price {
+      font-weight: bold;
+    }
+
+
+    .actions {
+      margin-top: 10px;
+    }
+
+
+    .remove-link, .checkout-link {
+      color: #333;
+      background-color: #ddd;
+      padding: 8px 12px;
+      text-decoration: none;
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+
+
+    .remove-link:hover, .checkout-link:hover {
+      background-color: #bbb;
+    }
+
+
+    #empty{
+      text-align:center;
+    }
+
+  </style>
+
+{% endblock %}
+
+
+{% block body %}
+
+  <header>
+      {% include 'navbar.html' %}
+  </header>
+
+
+  <div class="cart-container">
+
+    {% if cart_items %}
+
+      {% for item in cart_items %}
+        <div class="cart-item">
+          <a href="{% url 'Product_About_Page' item.product.id %}">
+
+            {% if item.product.image1 %}
+              <img src="{{ item.product.image1.url }}" alt="{{ item.product.title }}">
+            {% endif %}
+
+          </a>
+
+          <div class="product-details"><br>
+            <h2 class="product-title">{{ item.product.title }}</h2><br>
+            <p class="product-price">$ {{ item.product.price }}</p>
+            <br>
+
+            <div class="actions">
+
+              <a href="{% url 'checkout' item.product.id %}" class="btn btn-outline-success">Checkout</a>
+              <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-outline-danger">Remove</a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <br><br>
+
+      {% endfor %}
+
+    {% else %}
+      <h2 id="empty">Your cart is empty.</h2>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    {% include 'footer.html' %}
+  </footer>
+
+
+{% endblock %}

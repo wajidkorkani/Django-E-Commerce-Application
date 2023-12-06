@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Story Book | Login</title>
+
+
+<style>
+
+
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+
+  .container {
+    max-width: 400px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+  }
+
+
+  h2 {
+    text-align: center;
+    color: #3498db;
+  }
+
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  input {
+    text-align:center;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #333;
+    background: #f9f9f9;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+
+  input::placeholder {
+    color: #777;
+  }
+
+
+
+  input:focus {
+    border-color: #3498db;
+  }
+
+
+  button {
+    background-color: #3498db;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+  }
+
+
+
+  button:hover {
+    background-color: #2577b5;
+
+
+  }
+
+
+</style>
+
+{% endblock %}
+
+
+{% block body %}
+
+<div>
+    {% if error_message %}
+      <p>{{ error_message }}</p>
+    {% endif %}
+    <br>
+
+    <form class="container" method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="username">
+        <br><br>
+        <input type="password" name="password" placeholder="Password">
+        <br><br>
+        <button type="submit">Login</button>
+    </form>
+    <br>
+    <p> Don't have an account? <a href="{% url 'signup' %}"><button class=" btn btn-primary">Signup</button></a></p>
+    <a href="{% url 'password_reset' %}"><button class=" btn btn-primary">Forgot password</button></a>
+</div>
+
+
+
+{% endblock %}

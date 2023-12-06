@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+  <title>Velocity Cart | Home</title>
+
+  <style>
+
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    .navbar {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+
+    .product-card {
+      text-align: center;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(25% - 20px); /* 25% for each card with margin included */
+      box-sizing: border-box;
+    }
+
+
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+    }
+
+
+    h1 {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+
+
+    strong {
+      color: #e44d26;
+    }
+
+
+    #poster {
+      max-width: 100%;
+    }
+
+
+
+    @media only screen and (max-width: 768px) {
+      .product-card {
+        width: calc(50% - 20px); /* 50% for each card with margin included */
+
+      }
+    }
+
+
+    @media only screen and (max-width: 480px) {
+      .product-card {
+        width: calc(100% - 20px); /* 100% for each card with margin included */
+      }
+    }
+
+  </style>
+
+{% endblock %}
+
+{% block body %}
+
+  {% include 'navbar.html' %}
+
+    {% if poster %}
+
+      <div >
+          <img src="{{ poster.image.url }}" class="d-block w-100">
+      </div>
+
+      {% endif %}
+
+  <br><br>
+  <div class="product-container">
+
+    {% if products %}
+      {% for product in products %}
+        <div class="product-card">
+          <a href="{% url 'Product_About_Page' product.id %}">
+            {% if product.image1 %}
+              <img src="{{ product.image1.url }}" alt="{{ product.title }}">
+            {% endif %}
+
+          </a>
+          <h1>{{ product.title }}</h1>
+          <strong>$ {{ product.price }}</strong>
+
+          {% if user.is_authenticated %}
+          <br>
+          <a href="{% url 'add_to_cart' product.id %}" class="btn"><button class="btn btn-outline-warning">Add to cart</button></a>
+          <br>
+          <a href="{% url 'checkout' product.id %}" class="btn"><button class="btn btn-outline-success">Buy now</button></a>
+          {% else %}
+          <br>
+          <a href="{% url 'login' %}" class="btn"><button class="btn btn-outline-warning">Add to cart</button></a>
+          <br>
+          <a href="{% url 'login' %}" class="btn"><button class="btn btn-outline-success">Buy now</button></a>
+          {% endif %}
+
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <h2>Sorry, products are not added yet!</h2>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    {% include 'footer.html' %}
+  </footer>
+
+{% endblock %}

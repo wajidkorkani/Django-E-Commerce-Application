@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+  <title>Velocity Cart | Registration</title>
+
+
+  <style>
+
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+
+    .container {
+      max-width: 400px;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+
+    h2 {
+      text-align: center;
+      color: #3498db;
+    }
+
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    input {
+      text-align:center;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+      color: #333;
+      background: #f9f9f9;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+
+    input::placeholder {
+      color: #777;
+    }
+
+
+    input:focus {
+      border-color: #3498db;
+    }
+
+
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+
+    button:hover {
+      background-color: #2577b5;
+    }
+
+
+    #error_message{
+      color: red;
+    }
+
+  </style>
+
+{% endblock %}
+
+
+{% block body %}
+
+
+  <div class="container">
+    <h2>Registration</h2>
+    {% if error_message %}
+      <p id="error_message">{{ error_message }}</p>
+      <p id="error_message">{{ error_message2 }}</p>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <input type="text" name="username" placeholder="Username">
+
+      <input type="email" name="email" placeholder="Email">
+
+      <input type="text" name="first_name" placeholder="First Name" required>
+
+      <input type="text" name="last_name" placeholder="Last Name" required>
+
+      <input type="password" name="password1" placeholder="Password">
+
+      <input type="password" name="password2" placeholder="Confirm Password">
+
+      <button type="submit">Register</button>
+      <br>
+
+      <p>Already have an account? <a href="{% url 'login' %}" class="btn">Login</a></p>
+
+    </form>
+
+  </div>
+
+{% endblock %}
