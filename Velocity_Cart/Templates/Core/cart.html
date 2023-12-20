@@ -85,6 +85,10 @@
       text-align:center;
     }
 
+    #remove_all{
+      text-align:center;
+    }
+
   </style>
 
 {% endblock %}
@@ -127,14 +131,15 @@
 
         </div>
 
-        <br><br>
+        <br><br><hr><br><br>
 
       {% endfor %}
+      <a id="remove_all" href="{% url 'remove_all_items_from_cart' %}" class="btn btn-outline-danger">Remove All</a>
 
     {% else %}
       <h2 id="empty">Your cart is empty.</h2>
     {% endif %}
-
+    <br><br><hr><br><br>
   </div>
 
   <footer>

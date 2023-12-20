@@ -20,6 +20,7 @@ urlpatterns = [
     path('cart/', cart, name='cart'),
     path('add_to_cart/<int:pk>/', add_to_cart, name='add_to_cart'),
     path('remove_from_cart/<int:pk>/', remove_from_cart, name='remove_from_cart'),
+    path('remove/', remove_all_items_from_cart, name='remove_all_items_from_cart'),
 
 
     # Product purchase section
@@ -33,3 +34,6 @@ urlpatterns = [
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

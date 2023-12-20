@@ -284,6 +284,13 @@ def remove_from_cart(request, pk):
 
 
 
+def remove_all_items_from_cart(request):
+    items = CartItem.objects.filter(buyer=request.user)
+    for item in items:
+        item.delete()
+    return redirect('/cart/')
+
+
 
 # product purchase section
 
