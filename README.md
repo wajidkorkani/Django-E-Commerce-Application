@@ -14,6 +14,7 @@ Welcome to the Django E-Commerce Web Application or Velocity Cart! This project 
    - Users can view and search for products.
    - Web site owner can set a home page poster or banner image.
    - Application automatically manages and updates the home page image.
+   - Product with multipale images.
 
 3. **Shopping Cart:**
    - Users can add and remove products from their shopping cart.
